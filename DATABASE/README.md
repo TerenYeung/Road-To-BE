@@ -114,6 +114,12 @@ mysql> select * from book;
 mysql> insert into book(id, name, author) values(01, 'SPIC', 'Tom');
 ```
 
+更新数据
+
+```
+mysql> update book set name='cook' where id = 1;
+```
+
 - 登出
 ```
 mysql> quit;
@@ -123,4 +129,107 @@ mysql> exit;
 - SQL 的约束
 约束是一种限制，它通过对表的行或列的数据做出限制，来确保表的数据的完整性、唯一性。
 
+在MySQL中，通常有这几种约束：
 
+```
+约束类型：	主键	默认值	唯一	外键	非空
+关键字：	PRIMARY KEY	DEFAULT	UNIQUE	FOREIGN KEY	NOT NULL
+```
+
+主键 (PRIMARY KEY)是用于约束表中的一行，作为这一行的唯一标识符，在一张表中通过主键就能准确定位到一行
+
+主键不能有重复且不能为空。
+
+```
+# 主键
+mysql> create table employee(id int(10) primary key); 
+# 自定义主键
+mysql> create table department(dpt_name char(20) not null,constraint dpt_pk primary key(dpt_name))
+# 复合主键
+mysql> create table department(constraint proj_pk primary key(proj_num, proj_name));
+```
+
+默认值约束 (DEFAULT) 规定，当有 DEFAULT 约束的列，插入数据为空时，将使用默认值。
+
+UNOQUE 规定一张表中指定的一列的值必须不能有重复值，即这一列每个值都是唯一的。
+
+外键 (FOREIGN KEY) 既能确保数据完整性，也能表现表之间的关系。
+
+一个表可以有多个外键，每个外键必须 REFERENCES (参考) 另一个表的主键，被外键约束的列，取值必须在它参考的列中有对应值。
+
+
+```
+mysql> drop database demo;
+```
+
+加载外部 sql 文件
+
+```
+mysql> source path/to/demo.sql;
+```
+
+删除数据库
+
+```
+mysql> drop database demo;
+```
+
+删除数据表
+
+```
+mysql> drop table book;
+```
+
+---
+
+##### SELECT 语句
+
+```
+mysql> select col_ame from table_name where condition;
+```
+
+
+```
+# > < >= <= =
+mysql> select name, age from employee where age > 25;
+```
+
+```
+# and or (between and, 包括收尾数字)
+mysql> select name, age from employee where age > 25 and name != 'Jim' 
+mysql> select name, age from employee where age between 25 and 30;
+```
+
+```
+# in not in
+mysql> select name, age, phone, in_dpt from employee where in_dpt in('dpt3', 'dpt4');
+```
+
+```
+# like 常和通配符一起使用，其中 _ 代表一个未指定字符，% 代表不定个未指定字符；
+mysql> select name, age from employee where phone like '1101__';
+```
+
+```
+# 对结果排序，order by asc/desc
+mysql> select name, age, salary from employee order by salary desc;
+```
+
+```
+# SQL 内置函数和计算
+函数名：	COUNT	SUM	AVG	MAX	MIN
+作用：	计数	求和	求平均值	最大值	最小值
+
+mysql> select max(salary) as max_salary, min(salary) from employee;
+```
+
+```
+# 子查询，查询里面包含查询
+mysql>  select of_dpt, count(proj_name) as count_project from project where of_dpt in (select in_dpt from employee where name='Tom');
+```
+
+```
+# 连接查询，如果需要显示两个以上表的数据，需要使用 join 操作；
+mysql> select id, name, people_num from employee, department where employee.in_dpt = department.dpt_name order by id;
+mysql> select id, name, people_num from employee join department on employee.in_dpt = department.dpt_name order by id;
+```
