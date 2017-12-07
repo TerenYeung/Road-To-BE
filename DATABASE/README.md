@@ -233,3 +233,52 @@ mysql>  select of_dpt, count(proj_name) as count_project from project where of_d
 mysql> select id, name, people_num from employee, department where employee.in_dpt = department.dpt_name order by id;
 mysql> select id, name, people_num from employee join department on employee.in_dpt = department.dpt_name order by id;
 ```
+
+---
+
+##### 数据库及表的修改和删除
+
+- 重命名一张表
+
+```
+mysql> rename table old_name to new_name;
+``
+
+- 删除一张表
+
+```
+mysql> drop table table_name;
+```
+
+- 对一列的修改
+
+```
+# 增加一列
+mysq> alter table employee add height int(4) default 170 [after col_name] || first;
+
+mysql> alter table employee add weight int(4) default 120 after before height;
+
+mysql> 
+```
+# 删除一列
+
+```
+mysql> alter table employee drop test;
+```
+
+# 重命名一列
+```
+mysql> alter table employee change height shengao int(4) default 170;
+```
+
+# 修改表内容
+
+```
+mysql> update employee set age = 21, salary = 3000 where name = 'Tom';
+```
+
+# 删除一行记录
+```
+mysql> delete from employee where name = 'Tom';
+```
+
