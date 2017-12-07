@@ -282,3 +282,69 @@ mysql> update employee set age = 21, salary = 3000 where name = 'Tom';
 mysql> delete from employee where name = 'Tom';
 ```
 
+---
+
+##### 数据库其他操作：索引、视图、导入、导出、备份和恢复
+
+- 索引 ?
+当表中有大量记录时，若要对表进行查询，没有索引的情况是全表搜索：将所有记录一一取出，和查询条件进行一一对比，然后返回满足条件的记录。这样做会消耗大量数据库系统时间，并造成大量磁盘 I/O 操作。
+
+而如果在表中已建立索引，在索引中找到符合查询条件的索引值，通过索引值就可以快速找到表中的数据，可以大大加快查询速度。
+
+索引可以分为单列索引和组合索引，单列索引，即一个索引只包含单个列。组合索引，即一个索引包含多个列。
+
+虽然索引大大提高了查询速度，同时却会降低更新表的速度，如对表进行INSERT、UPDATE和DELETE。因为更新表时，MySQL不仅要保存数据，还要保存一下索引文件。
+
+建立索引会占用磁盘空间的索引文件。
+
+```
+# 创建索引
+mysql> create index idx_name on employee(name);
+# 删除索引
+mysql> drop index idx_name on employee;
+# 显示表的索引
+mysql> show index from employee;
+```
+
+- 视图
+视图是从一个或多个表中导出来的表，是一种虚拟存在的表。
+
+数据库中只存放了视图的定义，而没有存放视图中的数据，这些数据存放在原来的表中；
+
+视图中的数据依赖于原来表中的数据，一旦表中数据发生改变，显示在视图中的数据也会发生改变
+
+```
+# 创建视图
+mysql> create view v_emp(v_name, v_age, v_phone) as select name, age, phone from employee;
+mysql> select * from v_emp;
+# 删除视图
+mysql> drop view v_emp;
+```
+
+- 导入
+将文件中的数据导入一张表
+
+```
+mysql> load data infile 'path/to/file' into table employee;
+```
+
+- 导出
+
+```
+# 导出数据
+mysql> select * into outfile 'path/to/file' from employee;
+```
+
+- 备份
+
+```
+$ mysqldump -u root databse_name > bak_name;
+$ mysqldump -u root database_name table_name > bak_name;
+$ mysqldump -u root -p mysql_shiyan > bak.sql;
+```
+
+- 恢复
+
+```
+mysql> source /path/to/demo.sql
+```
