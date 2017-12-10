@@ -79,6 +79,12 @@ mysql> create table author
     -> );
 ```
 
+如果你忘记了表格字段的数据类型，可用
+
+```
+mysql> describe book;
+```
+
 数据类型
 
 MySQL 常用数据类型
@@ -106,6 +112,39 @@ char 的长度是固定的，varchar 则是变化的；
 
 ```
 mysql> select * from book;
+```
+
+```
+# 增加关键字 distinct 可检索出每条唯一输出记录
+```
+
+分组查询
+
+```
+# 查出 owner 中的宠物数
+mysql> select owner, count(*) from pet group by owner;
+```
+
+联表查询
+
+```
+# pet table and event table
+# 查询当宠物生孩子时的年龄
+mysql> 
+```
+
+获取当前激活的数据库
+
+```
+mysql> show database();
+```
+
+```
+# 当需要退出 SQL 语句时，输入 \c 取消它；
+mysql> select
+    -> user()
+    -> ,
+    ->
 ```
 
 插入数据
@@ -348,3 +387,56 @@ $ mysqldump -u root -p mysql_shiyan > bak.sql;
 ```
 mysql> source /path/to/demo.sql
 ```
+
+---
+
+关于 null
+
+任何变量和 null 使用运算符比较都是 null；
+
+因此，判断一个数是不是 null，使用 is null or is not null；
+
+---
+
+模式匹配
+
+```
+mysql> select * from pet where name like 'b%';
+mysql> select * from pet where name like '_____';
+mysql> select * from pet where name regexp '^b';
+
+```
+
+
+---
+
+常用查询
+
+```
+# 寻找列最大值
+mysql> select max(price) as price from shop;
+# 按价格降序查询并显示前 3 条记录
+mysql> select * from shop order by price limit 3;
+# 使用用户变量
+mysql> select @min_price:=min(price), @max_price:=max(price) from shop;
+mysql> select * from shop where price = @min_price or price = @max_price; 
+# 使用外键 ？
+# UNION 联合查询
+mysql> select * from shop where dealer = 'D' union select * from shop where price > 15; 
+```
+> MySQL用户变量：基于会话变量实现的，可以暂存值，并传递给同一连接里的下一条sql使用的变量，当客户端连接退出时，变量会被释放。
+
+MySQL用户变量应用场景：同一连接，未关闭情况下，帮你暂存一些计算结果。
+---
+
+##### 基本函数
+
+- 日期函数
+```
+mysql> select name, birth, curdate(), timestampdiff(year(curdate)-year(birth)) as age from pet;
+```
+
+```
+mysql> select name, birth from pet where month(birth) = month(date_add(curdate(), interval 1 month));
+```
+
