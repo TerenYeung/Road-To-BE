@@ -115,3 +115,66 @@ Redis 集合支持集合运算，如进行并集、交集等
 
 ---
 
+### Redis 系统管理
+
+#### 适用全体类型的常用命令
+
+```
+# 判断 key 是否存在
+> set mykey hello
+> exists mykey
+# 删除 key
+> del mykey
+# 返回 key 的数据类型
+> type mylist
+# 返回匹配的 key 列表
+> keys my*
+# 随机获取一个已存在的 key
+> randomkey
+# 重命名 key，rename or renamenx
+> rename mylist newlist
+# 返回当前数据库 key 的总数
+> dbsize
+```
+
+#### 时间相关命令
+
+```
+# 限定 key 生存时间，对于临时存储有用
+> set mykey hello
+> expire mykey 10
+> get key
+# after 10s
+> get key
+(nil)
+# 查询 key 剩余生存时间
+> set mykey hello ex 30
+> ttl key
+# 清除当前数据库的所有 key
+> flushdb
+# 清除所有数据库中的所有 key
+```
+
+#### 设置相关命令
+
+```
+# config get 读取 Redis 服务器的配置参数
+# config set 设置配置参数
+> config get requirepass
+> config set requirepass 123456
+> config get requriepass (noauth)
+> auth 123456
+> config get reuiqrepass
+```
+
+##### 查询信息
+
+```
+# info 命令
+> info server
+> info memory 存储占用相关信息
+> info all
+> info default
+```
+
+----
