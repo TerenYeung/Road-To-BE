@@ -408,6 +408,7 @@ mysql> select * from pet where name regexp '^b';
 ```
 
 
+
 ---
 
 常用查询
@@ -418,6 +419,7 @@ mysql> select max(price) as price from shop;
 # 按价格降序查询并显示前 3 条记录
 mysql> select * from shop order by price limit 3;
 # 使用用户变量
+mysql> SET @var_name := expr [, @var_name := expr] ...
 mysql> select @min_price:=min(price), @max_price:=max(price) from shop;
 mysql> select * from shop where price = @min_price or price = @max_price; 
 # 使用外键 ？
@@ -429,7 +431,7 @@ mysql> select * from shop where dealer = 'D' union select * from shop where pric
 MySQL用户变量应用场景：同一连接，未关闭情况下，帮你暂存一些计算结果。
 ---
 
-##### 基本函数
+##### 基本函数和操作符
 
 - 日期函数
 ```
@@ -439,4 +441,54 @@ mysql> select name, birth, curdate(), timestampdiff(year(curdate)-year(birth)) a
 ```
 mysql> select name, birth from pet where month(birth) = month(date_add(curdate(), interval 1 month));
 ```
+
+---
+
+### MySQL 语言结构
+
+---
+
+### MySQL 触发器
+
+触发器是与表有关的固定的数据库对象，当表上出席那特定事件时，将激活该对象；
+
+```
+# 创建 Trigger
+# create trigger trigger_name before|after(触发时机) insert|update|delete(激活触发程序的事件) for each row
+mysql> create trigger ins_sum before insert on account for each row set @sum = @sum + new.amount;
+# 销毁 Trigger
+mysql> drop trigger database.ins_sum; 
+```
+
+使用 old 和 new 关键字，能够访问受触发程序影响的行中的列。
+
+在 insert 触发程序中，仅能使用 new.col_name；
+在 delete 触发程序中，仅能使用 old.col_name;
+在 update 触发程序中，既能使用 old 又能使用 new;
+
+---
+
+### MySQL View
+
+---
+
+### MySQL 数据库管理
+
+#### 权限管理
+
+#### 用户管理
+
+```
+# 创建用户
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'monty'@'localhost'
+    ->     IDENTIFIED BY 'some_pass' WITH GRANT OPTION;
+
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'monty'@'%'
+    ->     IDENTIFIED BY 'some_pass' WITH GRANT OPTION;
+
+mysql> GRANT RELOAD,PROCESS ON *.* TO 'admin'@'localhost';
+
+mysql> GRANT USAGE ON *.* TO 'dummy'@'localhost';
+```
+
 
