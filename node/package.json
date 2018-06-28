@@ -1,0 +1,10 @@
+{
+  "name": "node-study",
+  "version": "1.0.0",
+  "description": "a repo for studying node",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "teren",
+  "license": "ISC"
+}
